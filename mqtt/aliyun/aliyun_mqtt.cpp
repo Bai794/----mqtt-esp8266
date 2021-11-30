@@ -8,7 +8,7 @@
 
 #define MQTT_PORT 1883
 #define SHA256HMAC_SIZE 32
-
+#define S56HMAC_SIZE 2
 // Verify tool: http://tool.oschina.net/encrypt?type=2
 static String hmac256(const String &signcontent, const String &ds)
 {
@@ -38,25 +38,25 @@ static String mqttUserName;
 static String mqttPassword;
 
 // call this function once
-void mqtt_prepare(const char *timestamp,const char *productKey, const char *deviceName,const char *deviceSecret,const char *region)
+void mqtt_prepare(const char *timestamp, const char *productKey, const char *deviceName, const char *deviceSecret, const char *region)
 {
   mqttBroker = productKey;
   mqttBroker += ".iot-as-mqtt.";
   mqttBroker += String(region);
   mqttBroker += ".aliyuncs.com";
-  
+
   // Serial.println(mqttBroker);
 
   mqttUserName = deviceName;
   mqttUserName += '&';
   mqttUserName += productKey;
-   //Serial.println(mqttUserName);
-   
+  // Serial.println(mqttUserName);
+
   mqttClientID = deviceName; // device name used as client ID
   mqttClientID += "|securemode=3,signmethod=hmacsha256,timestamp=";
   mqttClientID += timestamp;
   mqttClientID += '|';
-   //Serial.println(mqttClientID);
+  // Serial.println(mqttClientID);
 }
 
 bool connect_aliyun_mqtt_With_password(PubSubClient &mqttClient, const char *password)
@@ -113,9 +113,9 @@ bool connect_aliyun_mqtt(
 
   String mqttPassword = hmac256(signcontent, deviceSecret);
 
-   //Serial.print("HMAC256 data: ");
-   //Serial.println(signcontent);
-   //Serial.print("HMAC256 key: ");
+  // Serial.print("HMAC256 data: ");
+  // Serial.println(signcontent);
+  // Serial.print("HMAC256 key: ");
   // Serial.println(deviceSecret);
   // Serial.println(mqttPassword);
 
